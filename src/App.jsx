@@ -18,7 +18,7 @@ export default function App() {
     formData.append("text", text);
     if (image) formData.append("image", image);
 
-    const res = await fetch("http://localhost:3001/api/explain", {
+    const res = await fetch("http://math-teacher-production.up.railway.app/api/explain", {
       method: "POST",
       body: formData
     });
