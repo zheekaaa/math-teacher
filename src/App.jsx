@@ -18,10 +18,12 @@ export default function App() {
     formData.append("text", text);
     if (image) formData.append("image", image);
 
-    const res = await fetch("http://math-teacher-production.up.railway.app/api/explain", {
-      method: "POST",
-      body: formData
-    });
+    const API = import.meta.env.VITE_API_URL;
+
+fetch(`${API}/api/explain`, {
+  method: "POST",
+  body: formData
+});
 
     const data = await res.json();
     setAnswer(data.answer);
