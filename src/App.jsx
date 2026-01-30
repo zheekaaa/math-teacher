@@ -12,21 +12,30 @@ export default function App() {
   };
 
   const send = async () => {
-    setAnswer("Думаю... 🤔");
+    try {
+      setAnswer("Думаю... 🤔");
 
-    const formData = new FormData();
-    formData.append("text", text);
-    if (image) formData.append("image", image);
+      const formData = new FormData();
+      formData.append("text", text);
+      if (image) formData.append("image", image);
 
-    const API = import.meta.env.VITE_API_URL;
+      const API = import.meta.env.VITE_API_URL;
 
-fetch(`${API}/api/explain`, {
-  method: "POST",
-  body: formData
-});
+      const res = await fetch(`${API}/api/explain`, {
+        method: "POST",
+        body: formData
+      });
 
-    const data = await res.json();
-    setAnswer(data.answer);
+      if (!res.ok) {
+        throw new Error("Server error");
+      }
+
+      const data = await res.json();
+      setAnswer(data.answer);
+    } catch (err) {
+      console.error(err);
+      setAnswer("Ошибка 😕 Попробуй ещё раз");
+    }
   };
 
   return (
@@ -51,26 +60,15 @@ fetch(`${API}/api/explain`, {
         </button>
 
         {answer && (
-  <div style={styles.answer}>
-    {answer}
+          <div style={styles.answer}>
+            {answer}
 
-    <div style={{ display: "flex", gap: "10px", marginTop: "16px" }}>
-      <button
-        style={styles.feedbackBtn}
-        onClick={() => send("understood")}
-      >
-        Понял 👍
-      </button>
-
-      <button
-        style={styles.feedbackBtn}
-        onClick={() => send("confused")}
-      >
-        Не понял 😕
-      </button>
-    </div>
-  </div>
-)}
+            <div style={{ display: "flex", gap: "10px", marginTop: "16px" }}>
+              <button style={styles.feedbackBtn}>Понял 👍</button>
+              <button style={styles.feedbackBtn}>Не понял 😕</button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -104,8 +102,7 @@ const styles = {
     textAlign: "center",
     marginBottom: 18,
     fontSize: 22,
-    fontWeight: 700,
-    letterSpacing: 0.4
+    fontWeight: 700
   },
 
   textarea: {
@@ -117,8 +114,7 @@ const styles = {
     fontSize: 16,
     outline: "none",
     background: "rgba(0,0,0,0.3)",
-    color: "white",
-    backdropFilter: "blur(6px)"
+    color: "white"
   },
 
   photoBtn: {
@@ -130,36 +126,40 @@ const styles = {
     background: "rgba(255,255,255,0.14)",
     border: "1px solid rgba(255,255,255,0.25)",
     cursor: "pointer",
-    fontWeight: 600,
-    backdropFilter: "blur(8px)"
+    fontWeight: 600
   },
 
   mainBtn: {
-  marginTop: 14,
-  width: "100%",
-  padding: 16,
-  borderRadius: 22,
-  border: "1px solid rgba(255,255,255,0.2)",
-  background: "rgba(0,0,0,0.3)",
-  color: "white",
-  fontSize: 17,
-  fontWeight: 700,
-  cursor: "pointer",
-  position: "relative",
-  boxShadow:
-    "0 0 20px rgba(168,85,247,0.8), 0 0 40px rgba(99,102,241,0.6)",
-  transition: "all 0.3s ease" 
-},
-feedbackBtn: {
-  flex: 1,
-  padding: "12px",
-  borderRadius: 16,
-  border: "1px solid rgba(255,255,255,0.25)",
-  background: "rgba(255,255,255,0.08)",
-  color: "white",
-  cursor: "pointer",
-  fontWeight: 600,
-  backdropFilter: "blur(6px)"
-}
+    marginTop: 14,
+    width: "100%",
+    padding: 16,
+    borderRadius: 22,
+    border: "1px solid rgba(255,255,255,0.2)",
+    background: "rgba(0,0,0,0.3)",
+    color: "white",
+    fontSize: 17,
+    fontWeight: 700,
+    cursor: "pointer",
+    boxShadow: "0 0 20px rgba(168,85,247,0.8), 0 0 40px rgba(99,102,241,0.6)"
+  },
 
+  answer: {
+    marginTop: 16,
+    padding: 16,
+    borderRadius: 18,
+    background: "rgba(0,0,0,0.4)",
+    border: "1px solid rgba(255,255,255,0.2)"
+  },
+
+  feedbackBtn: {
+    flex: 1,
+    padding: 12,
+    borderRadius: 16,
+    border: "1px solid rgba(255,255,255,0.25)",
+    background: "rgba(255,255,255,0.08)",
+    color: "white",
+    cursor: "pointer",
+    fontWeight: 600
+  }
 };
+
