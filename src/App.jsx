@@ -37,14 +37,20 @@ export default function App() {
   return (
     <div style={styles.page}>
       <div style={styles.card}>
-        <h2 style={styles.title}>📘 Учитель математики</h2>
+        <h2 style={styles.title}>📘 Хелпер для глупых</h2>
 
         <textarea
+        
           placeholder="Напиши задачу или вставь текст"
           value={text}
           onChange={(e) => setText(e.target.value)}
           style={styles.textarea}
+          
         />
+        <p style={styles.hint}>
+  💡 Можешь написать: <b>«короче»</b>, <b>«объясни проще»</b>, <b>«как для ребёнка»</b>
+</p>
+
 
         <label style={styles.photoBtn}>
           📷 Сфоткать задачу
@@ -167,6 +173,13 @@ const styles = {
     color: "white",
     cursor: "pointer",
     fontWeight: 600
-  }
+  }, 
+  hint: {
+  marginTop: 8,
+  fontSize: 13,
+  opacity: 0.7,
+  textAlign: "center"
+}
+
 };
 
