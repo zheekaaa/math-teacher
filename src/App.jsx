@@ -11,33 +11,29 @@ export default function App() {
     setImage(file);
   };
 
-  const send = async () => {
-    try {
-      setAnswer("Думаю... 🤔");
+  const send = async (mode = "idle") => {
+  try {
+    setAnswer("Думаю... 🤔");
 
-      const formData = new FormData();
-      formData.append("text", text);
-      if (image) formData.append("image", image);
+    const formData = new FormData();
+    formData.append("text", text);
+    formData.append("mode", mode);
+    if (image) formData.append("image", image);
 
-      const API = "http://localhost:3001";
+    const API = import.meta.env.VITE_API_URL;
 
-      const res = await fetch(`${API}/api/explain`, {
-        method: "POST",
-        body: formData
-      });
+    const res = await fetch(`${API}/api/explain`, {
+      method: "POST",
+      body: formData
+    });
 
-      if (!res.ok) {
-        throw new Error("Server error");
-      }
-
-      const data = await res.json();
-      setAnswer(data.answer);
-    } catch (err) {
-      console.error(err);
-      setAnswer("Ошибка 😕 Попробуй ещё раз");
-    }
-  };
-
+    const data = await res.json();
+    setAnswer(data.answer);
+  } catch (err) {
+    console.error(err);
+    setAnswer("Ошибка 😕 Попробуй ещё раз");
+  }
+};
   return (
     <div style={styles.page}>
       <div style={styles.card}>
@@ -64,8 +60,32 @@ export default function App() {
             {answer}
 
             <div style={{ display: "flex", gap: "10px", marginTop: "16px" }}>
-              <button style={styles.feedbackBtn}>Понял 👍</button>
-              <button style={styles.feedbackBtn}>Не понял 😕</button>
+             <button
+  style={styles.feedbackBtn}
+  onClick={() => send("understood")}
+>
+  Понял 👍
+</button>
+
+<button
+  style={styles.feedbackBtn}
+  onClick={() => send("confused")}
+>
+  Не понял 😕
+</button>
+<button
+  style={{ ...styles.mainBtn, marginTop: 10 }}
+  onClick={() => {
+    navigator.clipboard.writeText(
+      `Я не понял задачу 😭\n\n${text}\n\nПопробуй объяснить:\n${window.location.href}`
+    );
+    alert("Ссылка скопирована 😈");
+  }}
+>
+  Скинуть другу 😈
+</button>
+
+
             </div>
           </div>
         )}

@@ -27,6 +27,16 @@ app.get("/test", (req, res) => {
 app.post("/api/explain", upload.single("image"), async (req, res) => {
   try {
     let text = req.body.text || "";
+    const mode = req.body.mode || "idle";
+
+if (mode === "confused") {
+  text = "Объясни ещё проще, как для 10-летнего:\n" + text;
+}
+
+if (mode === "understood") {
+  text = "Коротко проверь понимание и задай следующий шаг:\n" + text;
+}
+
 
     if (req.file) {
       const result = await Tesseract.recognize(req.file.path, "eng");
