@@ -73,19 +73,6 @@ export default function App() {
 >
   Не понял 😕
 </button>
-<button
-  style={{ ...styles.mainBtn, marginTop: 10 }}
-  onClick={() => {
-    navigator.clipboard.writeText(
-      `Я не понял задачу 😭\n\n${text}\n\nПопробуй объяснить:\n${window.location.href}`
-    );
-    alert("Ссылка скопирована 😈");
-  }}
->
-  Скинуть другу 😈
-</button>
-
-
             </div>
           </div>
         )}
