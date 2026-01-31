@@ -4,6 +4,12 @@ export default function App() {
   const [text, setText] = useState("");
   const [answer, setAnswer] = useState("");
   const [image, setImage] = useState(null);
+  if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js");
+  });
+}
+
 
   const handlePhoto = (e) => {
     const file = e.target.files[0];
