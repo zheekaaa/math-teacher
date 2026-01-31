@@ -19,7 +19,7 @@ export default function App() {
       formData.append("text", text);
       if (image) formData.append("image", image);
 
-      const API = import.meta.env.VITE_API_URL;
+      const API = "http://localhost:3001";
 
       const res = await fetch(`${API}/api/explain`, {
         method: "POST",
